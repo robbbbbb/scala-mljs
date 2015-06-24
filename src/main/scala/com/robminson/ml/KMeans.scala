@@ -1,4 +1,4 @@
-package com.mindcandy.warriors.scripts.logstash.stats
+package com.robminson.ml.stats
 
 import scala.annotation.tailrec
 
