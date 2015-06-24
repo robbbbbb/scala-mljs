@@ -12,3 +12,6 @@
 .idea/workspace.xml
 sbt
 target/.history
+.idea
+project/target
+target

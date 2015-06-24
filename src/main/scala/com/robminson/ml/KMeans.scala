@@ -21,6 +21,7 @@ import scala.annotation.tailrec
 
 object KMeans {
 
+
 //--- CORE ALGORITHM
 
   def calculate(population: Iterable[Product], k: Int) = {
