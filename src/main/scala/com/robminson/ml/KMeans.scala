@@ -24,7 +24,7 @@ object KMeans {
 
 //--- CORE ALGORITHM
 
-  def calculate(population: Iterable[Product], k: Int) = {
+  def calculate(population: Iterable[Product], k: Int): Clustering = {
     val popBounds = bounds(population)
     val initialCentroids = Range(0, k).map(_ => randomCentroid(popBounds)).toList
     val initialClusters = assignPopulation(population, initialCentroids, popBounds)
