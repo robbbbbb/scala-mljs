@@ -15,8 +15,83 @@
   <body>
     <!-- Include Scala.js compiled code -->
     <script type="text/javascript" src="./target/scala-2.11/scala-ml-js-fastopt.js"></script>
+    <!-- this div holds the chart -->
+    <div id="chart"></div>
+    <button class="btn" id="btn-initialise">Initialise</button>
+    <button class="btn" id="btn-iterate">Iterate</button>
     <!-- Script here will call transpiled scala -->
     <script type="text/javascript">
+
+        var points = [];
+        for (var i = 0; i < 100; i++) {
+            points = points.concat(new com.robminson.ml.Point(Math.random() * 100, Math.random() * 100));
+        }
+
+        var clusters = null;
+
+        var chart = c3.generate({
+            data: {
+                xs: {
+                    points: 'points_x'
+                },
+                // iris data from R
+                columns: [
+                    ["points_x"].concat(points.map(function(p) { return p.x; })),
+                    ["points"].concat(points.map(function(p) { return p.y; }))
+                ],
+                type: 'scatter'
+            },
+            axis: {
+                x: {
+                    label: 'X',
+                    tick: {
+                        fit: true
+                    }
+                },
+                y: {
+                    label: 'Y'
+                }
+            }
+        });
+
+        $('#btn-initialise').on('click', function (e) {
+            clusters = com.robminson.ml.KMeansJSInterface().initialise(points, 3);
+            console.log(clusters);
+        });
+
+        $('#btn-iterate').on('click', function (e) {
+            clusters = com.robminson.ml.KMeansJSInterface().iterate(points, clusters, 3);
+            console.log(clusters);
+        });
+
+        /*
+        setTimeout(function () {
+            chart.load({
+                xs: {
+                    virginica: 'virginica_x'
+                },
+                columns: [
+                    ["virginica_x", 3.3, 2.7, 3.0, 2.9, 3.0, 3.0, 2.5, 2.9, 2.5, 3.6, 3.2, 2.7, 3.0, 2.5, 2.8, 3.2, 3.0, 3.8, 2.6, 2.2, 3.2, 2.8, 2.8, 2.7, 3.3, 3.2, 2.8, 3.0, 2.8, 3.0, 2.8, 3.8, 2.8, 2.8, 2.6, 3.0, 3.4, 3.1, 3.0, 3.1, 3.1, 3.1, 2.7, 3.2, 3.3, 3.0, 2.5, 3.0, 3.4, 3.0],
+                    ["virginica", 2.5, 1.9, 2.1, 1.8, 2.2, 2.1, 1.7, 1.8, 1.8, 2.5, 2.0, 1.9, 2.1, 2.0, 2.4, 2.3, 1.8, 2.2, 2.3, 1.5, 2.3, 2.0, 2.0, 1.8, 2.1, 1.8, 1.8, 1.8, 2.1, 1.6, 1.9, 2.0, 2.2, 1.5, 1.4, 2.3, 2.4, 1.8, 1.8, 2.1, 2.4, 2.3, 1.9, 2.3, 2.5, 2.3, 1.9, 2.0, 2.3, 1.8],
+                ]
+            });
+        }, 1000);
+
+        setTimeout(function () {
+            chart.unload({
+                ids: 'setosa'
+            });
+        }, 2000);
+
+        setTimeout(function () {
+            chart.load({
+                columns: [
+                    ["virginica", 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, 0.4, 0.4, 0.3, 0.3, 0.3, 0.2, 0.4, 0.2, 0.5, 0.2, 0.2, 0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.2, 0.2, 0.3, 0.3, 0.2, 0.6, 0.4, 0.3, 0.2, 0.2, 0.2, 0.2],
+                ]
+            });
+        }, 3000);
+        */
+
     </script>
   </body>
 </html>
