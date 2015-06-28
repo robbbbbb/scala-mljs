@@ -25,11 +25,21 @@ object KMeans {
 //--- CORE ALGORITHM
 
   def calculate(population: Iterable[Product], k: Int): Clustering = {
-    val popBounds = bounds(population)
-    val initialCentroids = Range(0, k).map(_ => randomCentroid(popBounds)).toList
-    val initialClusters = assignPopulation(population, initialCentroids, popBounds)
+    converge(population, None, k)
+  }
 
-    converge(population, initialClusters, popBounds)
+  // a single iteration of the algorithm, left public to help with visualisation
+  def iterate(  population: Iterable[Product],
+                currentState: Option[Clustering],
+                k: Int): Clustering = {
+    val popBounds = bounds(population)
+    val newCentroids = currentState match {
+      case Some(state) =>
+        println(s"Converging...${state.map { case (_, cluster) => s"${cluster.size}" } mkString(",")}")
+        state.values.map(calculateCentroid(_)).toList
+      case _ => Range(0, k).map(_ => randomCentroid(popBounds)).toList
+    }
+    assignPopulation(population, newCentroids, popBounds)
   }
 
   // Core of the K-Means algorithm
@@ -39,16 +49,15 @@ object KMeans {
   //  if not we have converged so the state is the final one
   @tailrec
   private def converge( population: Iterable[Product],
-                        currentState: Clustering,
-                        bounds: List[(Double, Double)]): Clustering = {
-    println(s"Converging...${currentState.map { case (_, cluster) => s"${cluster.size}" } mkString(",")}")
-    val newCentroids  = currentState.values.map(calculateCentroid(_)).toList
-    val newState      = assignPopulation(population, newCentroids, bounds)
-    if (clusteringEqual(currentState, newState))
+                        currentState: Option[Clustering],
+                        k: Int): Clustering = {
+    val newState = iterate(population, currentState, k)
+    if (currentState.isDefined && clusteringEqual(currentState.get, newState))
       newState
     else
-      converge(population, newState, bounds)
+      converge(population, Some(newState), k)
   }
+
 
 //--- UTILS ---
 

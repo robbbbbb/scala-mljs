@@ -22,8 +22,32 @@ object Cluster {
 @JSExport
 object KMeansJSInterface {
   @JSExport
-  def getClusters(pointsJs: scalajs.js.Array[Point], clusters: Int) = {
-    val kMeansClusters = KMeans.calculate(pointsJs.toSeq, clusters)
-    kMeansClusters.map { case (centroid, points) => Cluster(centroid, points) }.toSeq.toJSArray
+  def initialise(points: scalajs.js.Array[Point], k: Int) = {
+    clusteringToJS(KMeans.iterate(
+      points.toSeq,
+      None,
+      k))
+  }
+
+  @JSExport
+  def iterate(points: scalajs.js.Array[Point], clusters: scalajs.js.Array[Cluster], k: Int) = {
+    clusteringToJS(KMeans.iterate(
+      points.toSeq,
+      if (clusters.isEmpty) None else Some(jsToClustering(clusters)),
+      k))
+  }
+
+  private def clusteringToJS(clustering: KMeans.Clustering) = {
+    clustering.
+      map { case (centroid, points) => Cluster(centroid, points) }.
+      toSeq.
+      sortBy(_.centroid.x). // this just gives is a stable ordering to make visualisation easier
+      toJSArray
+  }
+
+  private def jsToClustering(clustering: scalajs.js.Array[Cluster]): KMeans.Clustering = {
+    clustering.
+      groupBy(_.centroid).
+      map { case(centroid, clusters) => (Centroid(List(centroid.x, centroid.y)), clusters.head.points) }
   }
 }
