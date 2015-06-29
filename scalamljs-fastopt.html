@@ -23,8 +23,17 @@
     <script type="text/javascript">
 
         var points = [];
-        for (var i = 0; i < 100; i++) {
-            points = points.concat(new com.robminson.ml.Point(Math.random() * 100, Math.random() * 100));
+
+        var modality = 3;
+        var varianceFromModalCenter = 10;
+
+        function rand(pivot) { return pivot - varianceFromModalCenter + (Math.random() * varianceFromModalCenter * 2); }
+        function randomPoint(modalCenter) { return new com.robminson.ml.Point(rand(modalCenter.x), rand(modalCenter.y)); }
+        for (var mc = 0; mc < modality; mc++) {
+            var modalCenter = new com.robminson.ml.Point(Math.random() * 100, Math.random() * 100);
+            for (var i = 0; i < Math.floor(100 / modality); i++) {
+                points = points.concat(randomPoint(modalCenter));
+            }
         }
 
         var clusters = null;
