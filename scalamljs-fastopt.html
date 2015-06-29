@@ -16,7 +16,7 @@
     <!-- Include Scala.js compiled code -->
     <script type="text/javascript" src="./target/scala-2.11/scala-ml-js-fastopt.js"></script>
     <!-- this div holds the chart -->
-    <div id="chart"></div>
+    <div id="chart" style="height: 600px; width: 75%; margin: auto;"></div>
     <button class="btn" id="btn-initialise">Initialise</button>
     <button class="btn" id="btn-iterate">Iterate</button>
     <!-- Script here will call transpiled scala -->
@@ -47,6 +47,14 @@
                 },
                 // iris data from R
                 columns: [],
+                colors: {
+                    points0: clusterColor(0),
+                    points1: clusterColor(1),
+                    points2: clusterColor(2),
+                    points3: clusterColor(3),
+                    points4: clusterColor(4),
+                    points5: clusterColor(5)
+                },
                 type: 'scatter'
             },
             axis: {
@@ -59,6 +67,9 @@
                 y: {
                     label: 'Y'
                 }
+            },
+            transition: {
+                duration: 0 // turn off animations so points don't animate as they move between clusters (which makes it look like the data is changing
             }
         });
 
