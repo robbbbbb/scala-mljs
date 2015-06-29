@@ -18,6 +18,7 @@
     <!-- this div holds the chart -->
     <div id="chart" style="margin: auto;"></div>
     <!-- initialise/iterate/solve button -->
+    <button class="btn" id="btn-reset">Reset</button>
     <button class="btn" id="btn-initialise">Initialise</button>
     <button class="btn" id="btn-iterate">Iterate</button>
     <button class="btn" id="btn-complete">Complete</button>
@@ -25,19 +26,6 @@
     <script type="text/javascript">
 
         var points = [];
-
-        var modality = 3;
-        var varianceFromModalCenter = 10;
-
-        function rand(pivot) { return pivot - varianceFromModalCenter + (Math.random() * varianceFromModalCenter * 2); }
-        function randomPoint(modalCenter) { return new com.robminson.ml.Point(rand(modalCenter.x), rand(modalCenter.y)); }
-        for (var mc = 0; mc < modality; mc++) {
-            var modalCenter = new com.robminson.ml.Point(Math.random() * 100, Math.random() * 100);
-            for (var i = 0; i < Math.floor(100 / modality); i++) {
-                points = points.concat(randomPoint(modalCenter));
-            }
-        }
-
         var clusters = null;
 
         function clusterColor(idx) {
@@ -92,6 +80,27 @@
                 width: 640,
                 height: 640
             }
+        });
+
+        function init() {
+            var modality = 3;
+            var varianceFromModalCenter = 10;
+            function rand(pivot) { return pivot - varianceFromModalCenter + (Math.random() * varianceFromModalCenter * 2); }
+            function randomPoint(modalCenter) { return new com.robminson.ml.Point(rand(modalCenter.x), rand(modalCenter.y)); }
+            points = [];
+            for (var mc = 0; mc < modality; mc++) {
+                var modalCenter = new com.robminson.ml.Point(Math.random() * 100, Math.random() * 100);
+                for (var i = 0; i < Math.floor(100 / modality); i++) {
+                    points = points.concat(randomPoint(modalCenter));
+                }
+            }
+        }
+        init();
+
+        $('#btn-reset').on('click', function (e) {
+            init();
+            clusters = com.robminson.ml.KMeansJSInterface().initialise(points, 3);
+            updateClusters(clusters);
         });
 
         $('#btn-initialise').on('click', function (e) {
