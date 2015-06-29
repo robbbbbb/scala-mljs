@@ -4,11 +4,11 @@
       <meta charset="UTF-8">
       <title>KMeans/ScalaJS</title>
 
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet" type="text/css">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.css" rel="stylesheet" type="text/css">
       <link href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
   </head>
@@ -16,7 +16,7 @@
     <!-- Include Scala.js compiled code -->
     <script type="text/javascript" src="./target/scala-2.11/scala-ml-js-fastopt.js"></script>
     <!-- this div holds the chart -->
-    <div id="chart" style="height: 600px; width: 75%; margin: auto;"></div>
+    <div id="chart" style="margin: auto;"></div>
     <button class="btn" id="btn-initialise">Initialise</button>
     <button class="btn" id="btn-iterate">Iterate</button>
     <!-- Script here will call transpiled scala -->
@@ -43,14 +43,20 @@
                 xs: {
                     points0: 'points0_x',
                     points1: 'points1_x',
-                    points2: 'points2_x'
+                    points2: 'points2_x',
+                    centroid0: 'centroid0_x',
+                    centroid1: 'centroid1_x',
+                    centroid2: 'centroid2_x'
                 },
                 // iris data from R
                 columns: [],
                 colors: {
                     points0: clusterColor(0),
+                    centroid0: clusterColor(0),
                     points1: clusterColor(1),
+                    centroid1: clusterColor(1),
                     points2: clusterColor(2),
+                    centroid2: clusterColor(2),
                     points3: clusterColor(3),
                     points4: clusterColor(4),
                     points5: clusterColor(5)
@@ -70,6 +76,10 @@
             },
             transition: {
                 duration: 0 // turn off animations so points don't animate as they move between clusters (which makes it look like the data is changing
+            },
+            size: {
+                width: 640,
+                height: 640
             }
         });
 
@@ -91,12 +101,16 @@
         function loadOrUpdateCluster(cluster, clusterIdx) {
             console.log("Updating cluster " + clusterIdx + " with " + cluster.points.length + " points: " + cluster);
             var clusterName = 'points' + clusterIdx;
+            var centroidName = 'centroid' + clusterIdx;
             chart.load({
                 columns: [
                     [clusterName + "_x"].concat(cluster.points.map(function(p) { return p.x; })),
-                    [clusterName].concat(cluster.points.map(function(p) { return p.y; }))
+                    [clusterName].concat(cluster.points.map(function(p) { return p.y; })),
+                    [centroidName + "_x", cluster.centroid.x],
+                    [centroidName, cluster.centroid.y]
                 ]
             });
+            $(".c3-circles-" + centroidName).children().attr("r", "7.5").css("opacity", "1.0")
             console.log("Done loading " + clusterName);
         }
 
