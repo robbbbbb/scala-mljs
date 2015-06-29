@@ -37,6 +37,13 @@ object KMeansJSInterface {
       k))
   }
 
+  @JSExport
+  def calculate(points: scalajs.js.Array[Point], k: Int) = {
+    clusteringToJS(KMeans.calculate(
+      points.toSeq,
+      k))
+  }
+
   private def clusteringToJS(clustering: KMeans.Clustering) = {
     clustering.
       map { case (centroid, points) => Cluster(centroid, points.toJSArray) }.

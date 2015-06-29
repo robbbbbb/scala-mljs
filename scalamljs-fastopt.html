@@ -17,8 +17,10 @@
     <script type="text/javascript" src="./target/scala-2.11/scala-ml-js-fastopt.js"></script>
     <!-- this div holds the chart -->
     <div id="chart" style="margin: auto;"></div>
+    <!-- initialise/iterate/solve button -->
     <button class="btn" id="btn-initialise">Initialise</button>
     <button class="btn" id="btn-iterate">Iterate</button>
+    <button class="btn" id="btn-complete">Complete</button>
     <!-- Script here will call transpiled scala -->
     <script type="text/javascript">
 
@@ -102,13 +104,19 @@
             updateClusters(clusters);
         });
 
+        $('#btn-complete').on('click', function (e) {
+            clusters = com.robminson.ml.KMeansJSInterface().calculate(points, 3);
+            updateClusters(clusters);
+        });
+
+
+
         function updateClusters(clusters) {
             for (var idx = 0; idx < clusters.length; idx++)
                 loadOrUpdateCluster(clusters[idx], idx);
         }
 
         function loadOrUpdateCluster(cluster, clusterIdx) {
-            console.log("Updating cluster " + clusterIdx + " with " + cluster.points.length + " points: " + cluster);
             var clusterName = 'points' + clusterIdx;
             var centroidName = 'centroid' + clusterIdx;
             chart.load({
@@ -120,7 +128,6 @@
                 ]
             });
             $(".c3-circles-" + centroidName).children().attr("r", "7.5").css("opacity", "1.0")
-            console.log("Done loading " + clusterName);
         }
 
     </script>
