@@ -36,8 +36,9 @@ object KMeans {
     val newCentroids = currentState match {
       case Some(state) =>
         println(s"Converging...${state.map { case (_, cluster) => s"${cluster.size}" } mkString(",")}")
-        state.values.map(calculateCentroid(_)).toList
-      case _ => Range(0, k).map(_ => randomCentroid(popBounds)).toList
+        state.map { case (centroid, population) => calculateCentroid(centroid.id, population) }.toList
+      case _ =>
+        Range(0, k).map(i => randomCentroid(i, popBounds)).toList
     }
     assignPopulation(population, newCentroids, popBounds)
   }
@@ -70,8 +71,8 @@ object KMeans {
   }
 
   // An arbitrary dimension coordinate for modelling the centroid of a cluster
-  case class Centroid(coords: List[Double]) {
-    override def toString = s"Centroid(${coords.map(c => f"$c%.2f").mkString(", ")})"
+  case class Centroid(id: Int, coords: List[Double]) {
+    override def toString = s"Centroid($id, ${coords.map(c => f"$c%.2f").mkString(", ")})"
   }
 
   type Clustering = Map[Centroid, Iterable[Product]]
@@ -99,8 +100,8 @@ object KMeans {
   }
 
   // calculate the centroid of the given population
-  private def calculateCentroid(population: Iterable[Product]): Centroid = {
-    Centroid(
+  private def calculateCentroid(id: Int, population: Iterable[Product]): Centroid = {
+    Centroid(id,
       Range(0, population.head.productArity) map { idx =>
         population.map(_.doubleElement(idx)).sum / population.size.toDouble
       } toList
@@ -117,8 +118,8 @@ object KMeans {
   }
 
   // gives a random centroid lying within the given bounds
-  private def randomCentroid(bounds: List[(Double, Double)]): Centroid = {
-    Centroid(bounds.map { case (min, max) => min + (max - min) * math.random })
+  private def randomCentroid(id: Int, bounds: List[(Double, Double)]): Centroid = {
+    Centroid(id, bounds.map { case (min, max) => min + (max - min) * math.random })
   }
 
   // get the closest centroid to the given individual

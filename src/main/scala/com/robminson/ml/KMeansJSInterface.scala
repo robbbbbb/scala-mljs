@@ -11,11 +11,11 @@ import scala.scalajs.js.JSConverters._
 case class Point(@(JSExport @field) x: Double, @(JSExport @field) y: Double)
 
 @JSExport
-case class Cluster(@(JSExport @field) centroid: Point, @(JSExport @field) points: scalajs.js.Array[Point])
+case class Cluster(@(JSExport @field) id: Int, @(JSExport @field) centroid: Point, @(JSExport @field) points: scalajs.js.Array[Point])
 object Cluster {
   def apply(centroid: Centroid, points: Iterable[Product]): Cluster = {
     val centroidAsPoint = Point(centroid.coords(0), centroid.coords(1))
-    Cluster(centroidAsPoint, points.map(_.asInstanceOf[Point]).toJSArray)
+    Cluster(centroid.id, centroidAsPoint, points.map(_.asInstanceOf[Point]).toJSArray)
   }
 }
 
@@ -48,13 +48,13 @@ object KMeansJSInterface {
     clustering.
       map { case (centroid, points) => Cluster(centroid, points.toJSArray) }.
       toSeq.
-      sortBy(_.centroid.x). // this just gives is a stable ordering to make visualisation easier
+      sortBy(_.id). // this just gives is a stable ordering to make visualisation easier
       toJSArray
   }
 
   private def jsToClustering(clustering: scalajs.js.Array[Cluster]): KMeans.Clustering = {
     clustering.
       groupBy(_.centroid).
-      map { case(centroid, clusters) => (Centroid(List(centroid.x, centroid.y)), clusters.head.points.toSeq) }
+      map { case(centroid, clusters) => (Centroid(clusters.head.id, List(centroid.x, centroid.y)), clusters.head.points.toSeq) }
   }
 }
