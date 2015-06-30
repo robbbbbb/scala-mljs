@@ -8,3 +8,5 @@ I wanted to implement some ML algorithms and immediately you need to visualise s
 ## Random Notes
 
 When trying to get scala-js working with IntelliJ you may get bitten by the fact that at ToW the IntelliJ sbt auto-importer uses an out of date sbt-launcher jar. This causes it to fail on the enablePlugins line in build.sbt. To fix this you can select a more up to date launcher in the 'Import Project from SBT' dialog you get when opening a project in IntelliJ: Global SBT Settings > Launcher > Custom and select a sbt jar > 0.13.8 (hint: they're probably in ~/.sbt/launchers if you use the sbt-extras script from github).
+
+A random bit of functionality in scala-js which is under-documented is the JSArray class which allows you to pass and work with javascript arrays in scala. This instantly makes interop between the two languages radically easier. Take a look at the KMeansJSInterface class to see use of it.
