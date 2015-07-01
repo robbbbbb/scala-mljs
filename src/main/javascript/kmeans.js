@@ -90,6 +90,13 @@ $('#btn-complete').on('click', function (e) {
     updateClusters(clusters);
 });
 
+$('#btn-reset-withdata').on('click', function (e) {
+    // [{"x":1, "y":1}, {"x":99,"y":99}]
+    points = JSON.parse($('#text-pointdata').val()).map(function(obj) { return new com.robminson.ml.Point(obj.x, obj.y); });
+    clusters = com.robminson.ml.KMeansJSInterface().initialise(points, 3);
+    updateClusters(clusters);
+});
+
 
 
 function updateClusters(clusters) {
