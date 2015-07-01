@@ -92,7 +92,11 @@ $('#btn-complete').on('click', function (e) {
 
 $('#btn-reset-withdata').on('click', function (e) {
     // [{"x":1, "y":1}, {"x":99,"y":99}]
-    points = JSON.parse($('#text-pointdata').val()).map(function(obj) { return new com.robminson.ml.Point(obj.x, obj.y); });
+    var pointsJson = JSON.parse($('#text-pointdata').val())
+    var fieldX = Object.keys(pointsJson[0])[0];
+    var fieldY = Object.keys(pointsJson[0])[1];
+    points = pointsJson.map(function(obj) { return new com.robminson.ml.Point(obj[fieldX], obj[fieldY]); });
+    chart.axis.labels({x: fieldX, y: fieldY});
     clusters = com.robminson.ml.KMeansJSInterface().initialise(points, 3);
     updateClusters(clusters);
 });
