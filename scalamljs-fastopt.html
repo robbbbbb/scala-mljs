@@ -16,14 +16,24 @@
     <!-- Include Scala.js compiled code -->
     <script type="text/javascript" src="./target/scala-2.11/scala-ml-js-fastopt.js"></script>
 
-    <!-- this div holds the chart -->
-    <div id="chart" style="margin: auto;"></div>
+    <div class="container">
+        <row>
+            <div class="col-md-8">
+                <!-- this div holds the chart -->
+                <div id="chart" style="margin: auto;"></div>
 
-    <!-- controls -->
-    <button class="btn" id="btn-reset">Reset</button>
-    <button class="btn" id="btn-initialise">Initialise</button>
-    <button class="btn" id="btn-iterate">Iterate</button>
-    <button class="btn" id="btn-complete">Complete</button>
+                <!-- controls -->
+                <button class="btn" id="btn-reset">Reset and Randomize</button>
+                <button class="btn" id="btn-initialise">Initialise Centroids</button>
+                <button class="btn" id="btn-iterate">Iterate</button>
+                <button class="btn" id="btn-complete">Complete</button>
+            </div>
+            <div class="col-md-4">
+                <textarea id="text-pointdata" rows="20" cols="50" placeholder="Add JSON for point data here..."></textarea>
+                <button class="btn" id="btn-reset-withdata">Initialise with Data</button>
+            </div>
+        </row>
+    </div>
 
     <!-- Include script that calls compiled code and then uses c3 to visualise it -->
     <script type="text/javascript" src="./src/main/javascript/kmeans.js"></script>
