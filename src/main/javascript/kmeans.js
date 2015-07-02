@@ -101,6 +101,12 @@ $('#btn-reset-withdata').on('click', function (e) {
     updateClusters(clusters);
 });
 
+$('#btn-load-sessions-example').on('click', function (e) {
+    $.getJSON("./sessions.json", "", function(sessions) { $('#text-pointdata').val(JSON.stringify(sessions)); })
+});
+
+
+
 
 
 function updateClusters(clusters) {
