@@ -49,8 +49,8 @@ var chart = c3.generate({
         duration: 0 // turn off animations so points don't animate as they move between clusters (which makes it look like the data is changing
     },
     size: {
-        width: 640,
-        height: 640
+        width: 550,
+        height: 550
     }
 });
 
