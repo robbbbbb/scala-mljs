@@ -1,5 +1,5 @@
 # scala-mljs
-An implementation of some machine learning algorithms in scala that transpiles with scala-js in order to do visualisation using the C3 library
+An implementation of some machine learning algorithms in scala that transpiles with [https://github.com/scala-js/scala-js](scala.js) in order to do visualisation using the [https://github.com/masayuki0812/c3](C3.js) library
 
 ## Why?
 
